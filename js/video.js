@@ -8,7 +8,13 @@ function getTimeString(time){
   remainingSecond = remainingSecond % 60 ;
   return `${hour} hour ${minute} minute ${remainingSecond} second ago`;
 }
-
+const removeActiveClass = () =>{
+ const buttons = document.getElementsByClassName('category-btn');
+ console.log(buttons);
+ for(let btn of buttons){
+ btn.classList.remove('active')
+ }
+};
 //1 : fetch , load and Show categories on HTML
 
 //Create loadCategories
@@ -35,7 +41,14 @@ const loadCategoryVideos = (id) =>{
   // alert(id);
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
   .then((res) => res.json())
-  .then((data) => displayVideos(data.category))
+  .then((data) => {
+    //remove active class
+   removeActiveClass();
+    //actice the id class
+    const activeBtn = document.getElementById(`btn-${id}`)
+   activeBtn.classList.add("active");
+    displayVideos(data.category);
+  })
   .catch((error) => console.log(error));
 }
 //start
@@ -130,7 +143,7 @@ const displayCategories = (categories) => {
     //Create button
     const buttonContainer = document.createElement("div");
     buttonContainer.innerHTML = `
-    <button onclick = "loadCategoryVideos(${item.category_id})" class="btn">${item.category}</button>
+    <button id="btn-${item.category_id}" onclick = "loadCategoryVideos(${item.category_id})" class="btn category-btn">${item.category}</button>
     `
 
 
